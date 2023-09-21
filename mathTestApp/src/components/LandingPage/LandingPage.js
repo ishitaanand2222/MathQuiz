@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './LandingPage.css';
 
 const LandingPage = () => {
+
   const [name, setName] = useState('');
   const [questionIds, setQuestionIds] = useState([]);
   const [totalTime, setTotalTime] = useState(0);
@@ -12,15 +13,12 @@ const LandingPage = () => {
   const handleCheckboxChange = (event) => {
     const id = event.target.value;
     setQuestionIds(prevIds => {
-        console.log('coming')
         if(prevIds.includes(id)){
             const a = prevIds.filter((prevId) => prevId !== id);
-            console.log(a);
             setTotalTime(a.length * 5);
             return a;
         }else{
             const a =  [...prevIds, id];
-            console.log(a);
             setTotalTime(a.length * 5);
             return a;
         }

@@ -118,6 +118,7 @@ const TestPage = () => {
     }
 
     const targetTime = useMemo(() => startTime + totalTime * 60 * 1000, [startTime, totalTime]); 
+    
     return(
         <>
          {loading ? <p>loading...</p> :
