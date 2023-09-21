@@ -26,8 +26,11 @@ const LandingPage = () => {
   }
 
   const handleStartTest = () => {
-    if(questionIds.length === 0){
-      return alert('Cannot Start the test, Pick one question type atleast')
+    if(questionIds.length === 0 ){
+      return alert('To begin the test, kindly choose at least one question type !')
+    }
+    if(name === ''){
+      return alert('Kindly enter your name before moving to the test!')
     }
     const queryParams = new URLSearchParams();
     queryParams.append('totalTime', totalTime);
@@ -45,7 +48,7 @@ const LandingPage = () => {
                       'AreaUnderTheCurve_15', 
                       'AreaUnderTheCurve_2',
                       'BinomialTheorem_3',
-                      ' BinomialTheorem_4',
+                      'BinomialTheorem_4',
                       'AreaUnderTheCurve_5']
 
   return (

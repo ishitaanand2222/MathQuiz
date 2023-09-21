@@ -6,7 +6,6 @@ import axios from 'axios';
 import CountDown from 'react-countdown';
 import './TestPage.css';
 
-
 const TestPage = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -118,52 +117,53 @@ const TestPage = () => {
     }
 
     const targetTime = useMemo(() => startTime + totalTime * 60 * 1000, [startTime, totalTime]); 
-    
+
     return(
         <>
-         {loading ? <p>loading...</p> :
-          <div>
-          {submit === false? <div>
-              <h2>Test Page</h2>
-              <div className="countdown">
-                <CountDown key={targetTime} date={targetTime} renderer={renderer} />
-              </div>
-              {questions[currentQuestionIndex] && (
-                  <div className="mathjax-output">
-                      <MathJax.Provider>
-                          <MathJax.Node formula={questions[currentQuestionIndex]} />
-                      </MathJax.Provider>
-                  </div>
-              )}
-              <div className="navigation-buttons">
-                {currentQuestionIndex > 0 && <button onClick={handlePreviousQuestion}>Previous Question</button>}
-                {currentQuestionIndex < questions.length && <button onClick={handleNextQuestion}>Next Question</button>}
-              </div>
-              <br/>
+            {loading ? <p>loading...</p> :
+                <div>
+                {submit === false? <div>
+                    <h2>Test Page</h2>
+                    <div className="countdown">
+                        <CountDown key={targetTime} date={targetTime} renderer={renderer} />
+                    </div>
+                        <div className="mathjax-output">
+                            <MathJax.Provider>
+                                <MathJax.Node formula={questions[currentQuestionIndex]} />
+                            </MathJax.Provider>
+                        </div>
+                    <div className="navigation-buttons">
+                        {currentQuestionIndex > 0 && <button onClick={handlePreviousQuestion}>Previous Question</button>}
+                        {currentQuestionIndex < questions.length-1 && <button onClick={handleNextQuestion}>Next Question</button>}
+                    </div>
+                    <br/>
 
-              <button className="submit-button" onClick={handleSubmit1}>Submit Test</button>
-          </div> :  <div  className="submit-details">
-              <h1>Submit Details: {name}</h1>
-              <h3>Time spent on each question:</h3>
-                  <ul>
-                      {timeSpentOnQuestions.map((timeSpent, index) => (
-                          <li key={index}>
-                              Question {questionIds[index]}:<strong> {timeSpent.toFixed(2)}</strong> seconds
-                          </li>
-                      ))}
-                  </ul>
-                  <h3>Total Time Taken: </h3>
-                  <strong>{timeSpentOnQuestions.reduce((acc, curr) =>{
-                       acc = acc+curr;
-                      return acc
-                  },0)}</strong> seconds
-                  <br/>
-                  <button onClick={handleBackToHome}>Home Page</button>
-              </div> 
-          }
-  
-      </div> }
-         
+                    <button className="submit-button" onClick={handleSubmit1}>Submit Test</button>
+                </div> 
+                :  
+                <div  className="submit-details">
+                    <h1>Submit Details: {name}</h1>
+                    <h3>Time spent on each question:</h3>
+                    <ul>
+                        {timeSpentOnQuestions.map((timeSpent, index) => (
+                            <li key={index}>
+                                Question {questionIds[index]}:<strong> {timeSpent.toFixed(2)}</strong> seconds
+                            </li>
+                        ))}
+                    </ul>
+                    <h3>Total Time Taken: </h3>
+                    {}
+                    <strong>{timeSpentOnQuestions.reduce((acc, curr) =>{
+                        acc = acc+curr;
+                        return acc
+                    },0).toFixed(2)}
+                    </strong> seconds
+                    <br/>
+                    <button onClick={handleBackToHome}>Home Page</button>
+                </div> 
+                }
+        
+            </div> }    
         </>
     )
 
