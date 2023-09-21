@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from 'react-router-dom';
 import MathJax from 'react-mathjax';
 import axios from 'axios';
 import CountDown from 'react-countdown';
 import './TestPage.css';
 
 const TestPage = () => {
+
     const location = useLocation();
     const navigate = useNavigate();
     const[questions, setQuestions] = useState([]);
@@ -25,6 +25,7 @@ const TestPage = () => {
 
     useEffect(()=>{
         setStartTime(new Date().getTime());
+        setCurrentQuestionStartTime(new Date().getTime());
         const fetchedQuestions = async() => {
             try{
                 const fetchedQuestions = []
@@ -33,9 +34,9 @@ const TestPage = () => {
                         `https://0h8nti4f08.execute-api.ap-northeast-1.amazonaws.com/getQuestionDetails/getquestiondetails?QuestionID=${questionId}`
                     )
                     fetchedQuestions.push(response.data[0].Question);
-                    setQuestions(fetchedQuestions);
-                    setLoading(false); 
                 }
+                setQuestions(fetchedQuestions);
+                setLoading(false); 
             }catch(err){
                 console.log(err);
             }
@@ -101,8 +102,8 @@ const TestPage = () => {
 
     const handleBackToHome = () => {
         navigate('/');
+        window.location.reload();
     }
-
 
     const renderer = ({hours, minutes, seconds}) =>{
         const remainingTime = Math.max(0, targetTime - new Date().getTime());
@@ -120,16 +121,17 @@ const TestPage = () => {
 
     return(
         <>
-            {loading ? <p>loading...</p> :
+            {loading ? <p>loading...</p> :  questions &&
                 <div>
-                {submit === false? <div>
-                    <h2>Test Page</h2>
+                {submit === false ? <div>
+                    <h2>Mathematics Test</h2>
                     <div className="countdown">
                         <CountDown key={targetTime} date={targetTime} renderer={renderer} />
                     </div>
-                        <div className="mathjax-output">
+                      <div className="mathjax-output">
                             <MathJax.Provider>
-                                <MathJax.Node formula={questions[currentQuestionIndex]} />
+                               {questions[currentQuestionIndex] && <MathJax.Node formula={questions[currentQuestionIndex]} />}
+            
                             </MathJax.Provider>
                         </div>
                     <div className="navigation-buttons">
@@ -145,28 +147,33 @@ const TestPage = () => {
                     <h1>Submit Details: {name}</h1>
                     <h3>Time spent on each question:</h3>
                     <ul>
-                        {timeSpentOnQuestions.map((timeSpent, index) => (
-                            <li key={index}>
-                                Question {questionIds[index]}:<strong> {timeSpent.toFixed(2)}</strong> seconds
-                            </li>
-                        ))}
+                        {timeSpentOnQuestions.map((timeSpent, index) => {
+                            const displayTime = timeSpent >= 60 ? `${Math.floor(timeSpent / 60)} minutes ${Math.floor(timeSpent % 60)} seconds`
+                                : `${timeSpent.toFixed(2)} seconds`;
+                    
+                            return (
+                                <li key={index}>
+                                    Question {questionIds[index]}: <strong>{displayTime}</strong>
+                                </li>
+                            );
+                        })}
                     </ul>
-                    <h3>Total Time Taken: </h3>
-                    {}
+                    <b>Total time spent: </b>
                     <strong>{timeSpentOnQuestions.reduce((acc, curr) =>{
                         acc = acc+curr;
                         return acc
-                    },0).toFixed(2)}
-                    </strong> seconds
+                    },0) >= 60
+                    ? `${Math.floor(timeSpentOnQuestions.reduce((acc, curr) => acc + curr) / 60)} minutes ${Math.floor(timeSpentOnQuestions.reduce((acc, curr) => acc + curr) % 60)} seconds`
+                    : `${timeSpentOnQuestions.reduce((acc, curr) => acc + curr).toFixed(2)} seconds`}
+                    </strong>
                     <br/>
                     <button onClick={handleBackToHome}>Home Page</button>
                 </div> 
                 }
         
-            </div> }    
+            </div>}    
         </>
     )
-
 
 };
 
