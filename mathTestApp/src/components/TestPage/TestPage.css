@@ -1,0 +1,113 @@
+
+.countdown {
+    font-size: 1.5em; 
+    margin-bottom: 1em;
+  }
+  
+  .mathjax-output {
+    margin-bottom: 2em;
+  }
+  
+  .navigation-buttons {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+    margin-bottom: 1em;
+  }
+  
+  .navigation-buttons button {
+    padding: 1em 2em;
+    font-size: 1em; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0.5em; 
+  }
+
+  .navigation-buttons button + button {
+    margin-left: 10px; 
+  }
+  
+  .navigation-buttons button:hover {
+    background-color: #007BFF;
+    color: white;
+  }
+  
+  .submit-details {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px auto; 
+    max-width: 60%; 
+  }
+  
+  .submit-details h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .submit-details h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .submit-details ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .submit-details ul li {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .submit-details ul li strong {
+    font-weight: bold;
+  }
+
+  .submit-details button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #218838;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px; 
+  }
+  
+  .submit-details button:hover {
+    background-color: lightgreen; 
+  }
+  .submit-button {
+    padding: 1em 2em;
+    font-size: 1em;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #218838;
+  }
+  
+
+  @media (max-width: 576px) {
+    .countdown,
+    .mathjax-output {
+      font-size: 1em; 
+    }
+  
+    .navigation-buttons button {
+      padding: 0.8em 1.6em; 
+      font-size: 0.9em; 
+    }
+  
+    .submit-button {
+      padding: 0.8em 1.6em; 
+      font-size: 0.9em; 
+    }
+  }

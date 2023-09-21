@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import './LandingPage.css';
 
 const LandingPage = () => {
   const [name, setName] = useState('');
@@ -50,31 +51,34 @@ const LandingPage = () => {
                       'AreaUnderTheCurve_5']
 
   return (
-    <div>
+    <div  className="container">
       <h1>Mathematics Test</h1>
       <label htmlFor="name">Name:</label>
       <input
         type="text"
         id="name"
         value={name}
+        className="input-field"
         onChange={(e) => setName(e.target.value)}
       />
-      <h2>Select Questions for the Test:</h2>
-      {questionId.map((quest,index) => {
-        return (
-            <div key={index}>
-                <input 
-                   type="checkbox"
-                   id={`checkbox${index}`} 
-                   value={quest}
-                   onChange={handleCheckboxChange}
-                />
-                <label htmlFor={`checkbox${index}`}>{quest}</label>
-            </div>
-        )
-      })}
-      <p>Total Time for the Test: {totalTime} minutes</p>
-      <button onClick={handleStartTest}>Start Test</button>
+      <div  className="question-list">
+        <h2>Select Questions for the Test:</h2>
+        {questionId.map((quest,index) => {
+          return (
+              <div key={index}>
+                  <input 
+                    type="checkbox"
+                    id={`checkbox${index}`} 
+                    value={quest}
+                    onChange={handleCheckboxChange}
+                  />
+                  <label htmlFor={`checkbox${index}`}>{quest}</label>
+              </div>
+          )
+        })}
+      </div>
+      <p className="total-time">Total Time for the Test: {totalTime} minutes</p>
+      <button onClick={handleStartTest} className="start-button">Start Test</button>
     </div>
   );
 };

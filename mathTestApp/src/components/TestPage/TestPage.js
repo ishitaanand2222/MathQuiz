@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import MathJax from 'react-mathjax';
 import axios from 'axios';
 import CountDown from 'react-countdown';
+import './TestPage.css';
+
 
 const TestPage = () => {
     const location = useLocation();
@@ -21,25 +23,19 @@ const TestPage = () => {
     const name = queryParams.get('userName');
     const questionIds = Array.from(queryParams.keys()).filter(key => key.startsWith('questionIds')).map(key => queryParams.get(key));
     const [timeSpentOnQuestions, setTimeSpentOnQuestions] = useState(Array(questionIds.length).fill(0));
-    // console.log(questionIds);
 
     useEffect(()=>{
         setStartTime(new Date().getTime());
         const fetchedQuestions = async() => {
             try{
                 const fetchedQuestions = []
-                // console.log(questionIds);
                 for(const questionId of questionIds){
-                    console.log(questionId);
                     const response = await axios.get(
                         `https://0h8nti4f08.execute-api.ap-northeast-1.amazonaws.com/getQuestionDetails/getquestiondetails?QuestionID=${questionId}`
                     )
-                    console.log(response.data[0].Question);
                     fetchedQuestions.push(response.data[0].Question);
-                    console.log('here1', fetchedQuestions);
                     setQuestions(fetchedQuestions);
                     setLoading(false); 
-                    console.log('here2');
                 }
             }catch(err){
                 console.log(err);
@@ -50,9 +46,7 @@ const TestPage = () => {
     },[])
 
     const handleNextQuestion = () => {
-        console.log('hhhs')
         if (currentQuestionStartTime) {
-            console.log("heheh")
             const timeSpent = (new Date().getTime() - currentQuestionStartTime) / 1000; 
             setTimeSpentOnQuestions(prevTimeSpent => {
                 const updatedTimeSpent = [...prevTimeSpent];
@@ -92,11 +86,9 @@ const TestPage = () => {
 
     const handleSubmit1 = () => {
         setSubmit(true);
-        console.log(currentQuestionStartTime);
         handleSubmit();
     }
     const handleSubmit = () => {
-        console.log(currentQuestionStartTime);
         if (currentQuestionStartTime) {
             const timeSpent = (new Date().getTime() - currentQuestionStartTime) / 1000; 
             setTimeSpentOnQuestions(prevTimeSpent => {
@@ -106,13 +98,14 @@ const TestPage = () => {
             });
             setPreviousQuestionTime(timeSpent);
         }
-        console.log('Time spent on each question:', timeSpentOnQuestions);
     };
 
+    const handleBackToHome = () => {
+        navigate('/');
+    }
 
 
     const renderer = ({hours, minutes, seconds}) =>{
-        // console.log("renderer called")
         const remainingTime = Math.max(0, targetTime - new Date().getTime());
         const remainingMinutes = Math.floor((remainingTime / 1000) / 60);
         const remainingSeconds = Math.floor((remainingTime / 1000) % 60);
@@ -131,35 +124,40 @@ const TestPage = () => {
           <div>
           {submit === false? <div>
               <h2>Test Page</h2>
-              <CountDown key={targetTime} date={targetTime} renderer={renderer} />
+              <div className="countdown">
+                <CountDown key={targetTime} date={targetTime} renderer={renderer} />
+              </div>
               {questions[currentQuestionIndex] && (
-                  <div>
+                  <div className="mathjax-output">
                       <MathJax.Provider>
-                          {console.log(questions[currentQuestionIndex])}
                           <MathJax.Node formula={questions[currentQuestionIndex]} />
                       </MathJax.Provider>
                   </div>
               )}
-              {currentQuestionIndex > 0 && <button onClick={handlePreviousQuestion}>Previous Question</button>}
-              {currentQuestionIndex < questions.length && <button onClick={handleNextQuestion}>Next Question</button>}
+              <div className="navigation-buttons">
+                {currentQuestionIndex > 0 && <button onClick={handlePreviousQuestion}>Previous Question</button>}
+                {currentQuestionIndex < questions.length && <button onClick={handleNextQuestion}>Next Question</button>}
+              </div>
               <br/>
 
-              <button onClick={handleSubmit1}>Submit Test</button>
-          </div> :  <div>
+              <button className="submit-button" onClick={handleSubmit1}>Submit Test</button>
+          </div> :  <div  className="submit-details">
               <h1>Submit Details: {name}</h1>
               <h3>Time spent on each question:</h3>
                   <ul>
                       {timeSpentOnQuestions.map((timeSpent, index) => (
                           <li key={index}>
-                              Question {questionIds[index]}: {timeSpent.toFixed(2)} seconds
+                              Question {questionIds[index]}:<strong> {timeSpent.toFixed(2)}</strong> seconds
                           </li>
                       ))}
                   </ul>
                   <h3>Total Time Taken: </h3>
-                  {timeSpentOnQuestions.reduce((acc, curr) =>{
+                  <strong>{timeSpentOnQuestions.reduce((acc, curr) =>{
                        acc = acc+curr;
                       return acc
-                  },0)} seconds
+                  },0)}</strong> seconds
+                  <br/>
+                  <button onClick={handleBackToHome}>Home Page</button>
               </div> 
           }
   
